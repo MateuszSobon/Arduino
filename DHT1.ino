@@ -1,8 +1,8 @@
 #include "DHT.h"
 #include <Wire.h> 
 #include <LiquidCrystal_I2C.h>
-//#include <SPI.h>
-//#include <SD.h>
+#include <SPI.h>
+#include <SD.h>
 
 
 #define DHTPIN 2    //declare pin number connected to dht2
@@ -11,7 +11,7 @@
 #define DHTTYPE DHT11   // Type of sensor
 
 byte bell[8]  = {0b00010, 0b00101, 0b00010, 0b00000, 0b00000, 0b00000, 0b00000};
-//File myFile;
+File myFile;
 
 DHT dht(DHTPIN, DHTTYPE);   //create object dht sensor
 DHT dht2(DHTPIN2, DHTTYPE); //create object dht2 sensor
@@ -25,17 +25,24 @@ void setup()
   dht2.begin(); 
   lcd.begin(); 
 
-  //lcd.noBacklight();
   lcd.createChar(0, bell);
-/*
+
   if (!SD.begin(4)) 
   {
-    Serial.println("initialization failed!");
+    Serial.println("Blad inicializacji");
+    lcd.clear();
+    lcd.home();
+    lcd.print("Blad startu");
+    lcd.setCursor(0, 1);
+    lcd.print("Resetuj wszystko");
+    while(1); 
   }
   
   Serial.println("Konfiguracja zakonczona");
-  //lcd.print("Konfiguracja ok");
-*/
+  lcd.clear();
+  lcd.home();
+  lcd.print("Konfiguracja ok");
+
 }
 
 void loop() {
@@ -50,9 +57,11 @@ void loop() {
 
   if (isnan(h) || isnan(t) || isnan(h2) || isnan(t2)) // Check if any reads failed and exit early (to try again).
   {
-    Serial.println(F("Failed to read from DHT sensor!"));
-    //lcd.home();
-    //lcd.print("Blad odczytu");
+    Serial.println(F("Blad przy odczytaniu DHT"));
+    lcd.clear();
+    lcd.home();
+    lcd.print("Blad odczytu DHT");
+    delay(2000);
     return;
   }
 
@@ -60,7 +69,7 @@ void loop() {
   Serial.print(h);
   Serial.print("%  Temperature: ");
   Serial.print(t);
-  Serial.print("°C ");
+  Serial.print("°C   ");
 
   Serial.print("Humidity2: ");
   Serial.print(h2);
@@ -86,24 +95,52 @@ void loop() {
   lcd.write(0);
   lcd.print("C ");
 
-  /*myFile = SD.open("test.txt", FILE_WRITE);
+  delay(5000);
+  
+  myFile = SD.open("test.txt", FILE_WRITE);
     
   if (myFile) 
   {
     Serial.print("Zapisywanie do pliku...");
-    myFile.println(h,t);
+    lcd.clear();
+    lcd.home();
+    lcd.print("Zapis pliku...");
+
     
+    myFile.print(h);
+    myFile.print("; ");
+    myFile.print(t);
+    myFile.print(";  ");
+    myFile.print(h2);
+    myFile.print("; ");
+    myFile.print(t2); 
+    
+    myFile.print("\n");
+    
+    myFile.print((h2+h)/2);
+    myFile.print("; ");
+    myFile.print((t2+t)/2);
+    myFile.print("\n");
+       
+ 
     myFile.close(); // close the file:
+
+    delay(3000);
     
     Serial.println("Zapisano");
+    lcd.clear();
     lcd.home();
     lcd.print("Zapisano");
+
+    delay(1000);
   } 
   else 
   {
     Serial.println("Blad podczas zapisywania");  // jezeli blad to daj komunikat
+    lcd.clear();
     lcd.home();
     lcd.print("Blad zapisu");
+    delay(2000);
   }
-  */
+  
 }
