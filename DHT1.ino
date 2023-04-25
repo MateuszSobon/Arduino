@@ -12,6 +12,11 @@
 #define DHTTYPE DHT11   // Type of sensor
 
 byte bell[8]  = {0b00010, 0b00101, 0b00010, 0b00000, 0b00000, 0b00000, 0b00000}; //tworze znak stopni
+
+int w0;
+int w1;
+int w2;
+
 File myFile;
 
 virtuabotixRTC myRTC(10, 9, 8);
@@ -23,7 +28,7 @@ void setup()
 {
   Serial.begin(9600);
 
-  //myRTC.setDS1302Time(00, 38, 13, 2, 25, 4, 2023); // ustawianie czasu poczatkowego
+  myRTC.setDS1302Time(00, 13, 14, 2, 25, 4, 2023); // ustawianie czasu poczatkowego
 
   dht.begin(); //setting sensor
   dht2.begin(); 
@@ -59,6 +64,10 @@ void loop() {
   float t = dht.readTemperature();
   float t2 = dht2.readTemperature();
 
+  w0=analogRead(A0);
+  w1=analogRead(A1);
+  w2=analogRead(A2);
+
   if (isnan(h) || isnan(t) || isnan(h2) || isnan(t2)) // Check if any reads failed and exit early (to try again).
   {
     Serial.println(F("Blad przy odczytaniu DHT"));
@@ -80,17 +89,24 @@ void loop() {
   Serial.println(myRTC.minutes);
   
   
-  Serial.print("Humidity: ");
+  Serial.print("Wilgotnosc  1: ");
   Serial.print(h);
-  Serial.print("%  Temperature: ");
-  Serial.print(t);
-  Serial.print("°C   ");
-
-  Serial.print("Humidity2: ");
+  Serial.print("% 2: ");
   Serial.print(h2);
-  Serial.print("%  Temperature2: ");
+  Serial.print("%  Temperatrura  1: ");
+  Serial.print(t);
+  Serial.print("°C 2: ");
   Serial.print(t2);
-  Serial.print("°C  ");
+  Serial.print("°C ");
+
+  Serial.print("\n");
+
+  Serial.print("Wilgotnosc gleby  1: ");
+  Serial.print(w0);
+  Serial.print(" 2: ");
+  Serial.print(w1);
+  Serial.print(" 3: ");
+  Serial.print(w2);
   
   Serial.print("\n");
 
@@ -110,6 +126,18 @@ void loop() {
   lcd.write(0);
   lcd.print("C ");
 
+  delay(5000);
+
+  lcd.clear();
+  
+  lcd.print("Wilgotnosc gleby");
+  lcd.setCursor(0, 1);
+  lcd.print(w0);
+  lcd.setCursor(6, 1);
+  lcd.print(w1);
+  lcd.setCursor(12, 1);
+  lcd.print(w2);
+  
   delay(5000);
   
   myFile = SD.open("test.txt", FILE_WRITE);
@@ -141,7 +169,14 @@ void loop() {
     myFile.print(";  ");
     myFile.print(h2);
     myFile.print("; ");
-    myFile.print(t2); 
+    myFile.print(t2);
+    myFile.print("; ");
+    
+    myFile.print(w0);
+    myFile.print(";  ");
+    myFile.print(w1);
+    myFile.print("; ");
+    myFile.print(w2); 
     
     myFile.print("\n");
     
