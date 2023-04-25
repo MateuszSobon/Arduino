@@ -3,6 +3,7 @@
 #include <LiquidCrystal_I2C.h>
 #include <SPI.h>
 #include <SD.h>
+#include <virtuabotixRTC.h> 
 
 
 #define DHTPIN 2    //declare pin number connected to dht2
@@ -10,9 +11,10 @@
 
 #define DHTTYPE DHT11   // Type of sensor
 
-byte bell[8]  = {0b00010, 0b00101, 0b00010, 0b00000, 0b00000, 0b00000, 0b00000};
+byte bell[8]  = {0b00010, 0b00101, 0b00010, 0b00000, 0b00000, 0b00000, 0b00000}; //tworze znak stopni
 File myFile;
 
+virtuabotixRTC myRTC(10, 9, 8);
 DHT dht(DHTPIN, DHTTYPE);   //create object dht sensor
 DHT dht2(DHTPIN2, DHTTYPE); //create object dht2 sensor
 LiquidCrystal_I2C lcd(0x27, 16, 2); //create object LCD monitor
@@ -20,6 +22,8 @@ LiquidCrystal_I2C lcd(0x27, 16, 2); //create object LCD monitor
 void setup() 
 {
   Serial.begin(9600);
+
+  //myRTC.setDS1302Time(00, 38, 13, 2, 25, 4, 2023); // ustawianie czasu poczatkowego
 
   dht.begin(); //setting sensor
   dht2.begin(); 
@@ -64,7 +68,18 @@ void loop() {
     delay(2000);
     return;
   }
-
+  
+  Serial.print(myRTC.dayofmonth);
+  Serial.print(".");
+  Serial.print(myRTC.month);
+  Serial.print(".");    
+  Serial.print(myRTC.year);
+  Serial.print(" "); 
+  Serial.print(myRTC.hours);
+  Serial.print(":");
+  Serial.println(myRTC.minutes);
+  
+  
   Serial.print("Humidity: ");
   Serial.print(h);
   Serial.print("%  Temperature: ");
@@ -106,7 +121,20 @@ void loop() {
     lcd.home();
     lcd.print("Zapis pliku...");
 
-    
+    myRTC.updateTime(); 
+     
+    myFile.print(myRTC.dayofmonth);
+    myFile.print(".");
+    myFile.print(myRTC.month);
+    myFile.print(".");    
+    myFile.print(myRTC.year);
+    myFile.print(" "); 
+    myFile.print(myRTC.hours);
+    myFile.print(":");
+    myFile.print(myRTC.minutes);
+
+
+    myFile.print("\n");
     myFile.print(h);
     myFile.print("; ");
     myFile.print(t);
