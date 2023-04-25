@@ -28,7 +28,7 @@ void setup()
 {
   Serial.begin(9600);
 
-  myRTC.setDS1302Time(00, 13, 14, 2, 25, 4, 2023); // ustawianie czasu poczatkowego
+  //myRTC.setDS1302Time(00, 00, 16, 2, 25, 4, 2023); // ustawianie czasu poczatkowego
 
   dht.begin(); //setting sensor
   dht2.begin(); 
@@ -163,13 +163,13 @@ void loop() {
 
 
     myFile.print("\n");
-    myFile.print(h);
-    myFile.print("; ");
     myFile.print(t);
-    myFile.print(";  ");
-    myFile.print(h2);
     myFile.print("; ");
     myFile.print(t2);
+    myFile.print(";  ");
+    myFile.print(h);
+    myFile.print("; ");
+    myFile.print(h2);
     myFile.print("; ");
     
     myFile.print(w0);
