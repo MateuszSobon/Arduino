@@ -93,7 +93,7 @@ void loop() {
   Serial.print(h);
   Serial.print("% 2: ");
   Serial.print(h2);
-  Serial.print("%  Temperatrura  1: ");
+  Serial.print("%  Temperatura  1: ");
   Serial.print(t);
   Serial.print("°C 2: ");
   Serial.print(t2);
@@ -190,12 +190,11 @@ void loop() {
 
     delay(3000);
     
-    Serial.println("Zapisano");
+    Serial.println("Zapisano;");
     lcd.clear();
     lcd.home();
-    lcd.print("Zapisano");
-
-    delay(1000);
+    lcd.print("Zapisano;");
+    
   } 
   else 
   {
