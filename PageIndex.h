@@ -28,18 +28,19 @@ const char MAIN_page[] PROGMEM = R"=====(
     </p>
 
     <script>
-      setInterval(function() 
-      {
-        // Call a function repetatively with 2 Second interval
+      setInterval(function() // Call a function repetatively with 2 Second interval
+      {                 
         getTemperatureData();
-      }, 2000); 
+      } , 2000); 
       
 
       function getTemperatureData() 
       {
         var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
-          if (this.readyState == 4 && this.status == 200) {
+        xhttp.onreadystatechange = function() 
+        {
+          if (this.readyState == 4 && this.status == 200) 
+          {
             document.getElementById("data").innerHTML =
             this.responseText;
           }
@@ -47,6 +48,7 @@ const char MAIN_page[] PROGMEM = R"=====(
         xhttp.open("GET", "readData", true);
         xhttp.send();
       }
+
       
     </script>
   </body>

@@ -7,6 +7,7 @@ const char* ssid = "Orange_Swiatlowod_7510_2"; // SSID and Password of your WiFi
 const char* password = "HDwDTPYos4xvJ2eevs";
 
 ESP8266WebServer server(80);  //--> Server on port 80
+char data[200] = "";
 
 
 void handleRoot() // This routine is executed when you open NodeMCU ESP8266 IP Address in browser
@@ -17,9 +18,9 @@ void handleRoot() // This routine is executed when you open NodeMCU ESP8266 IP A
 
 void handledata() // Procedure for reading the temperature value of a DHT11 sensor
 {
-  char data[200] = "";
   if(Serial.available()>0)
   {
+    memset(data, '\0', sizeof(data)); // clear array
     Serial.readBytesUntil(';', data, 200);
     Serial.println(data);
   }
