@@ -28,7 +28,7 @@ void setup()
 {
   Serial.begin(9600);
 
-  //myRTC.setDS1302Time(00, 00, 16, 2, 25, 4, 2023); // ustawianie czasu poczatkowego
+  //myRTC.setDS1302Time(00, 59, 12, 6, 10, 6, 2023); // ustawianie czasu poczatkowego
 
   dht.begin(); //setting sensor
   dht2.begin(); 
@@ -66,7 +66,7 @@ void loop() {
 
   w0=analogRead(A0);
   w1=analogRead(A1);
-  w2=analogRead(A2);
+
 
   if (isnan(h) || isnan(t) || isnan(h2) || isnan(t2)) // Check if any reads failed and exit early (to try again).
   {
@@ -105,8 +105,6 @@ void loop() {
   Serial.print(w0);
   Serial.print(" 2: ");
   Serial.print(w1);
-  Serial.print(" 3: ");
-  Serial.print(w2);
   
   Serial.print("\n");
 
@@ -135,9 +133,7 @@ void loop() {
   lcd.print(w0);
   lcd.setCursor(6, 1);
   lcd.print(w1);
-  lcd.setCursor(12, 1);
-  lcd.print(w2);
-  
+
   delay(5000);
   
   myFile = SD.open("test.txt", FILE_WRITE);
@@ -171,21 +167,13 @@ void loop() {
     myFile.print("; ");
     myFile.print(h2);
     myFile.print("; ");
-    
+
     myFile.print(w0);
     myFile.print(";  ");
-    myFile.print(w1);
-    myFile.print("; ");
-    myFile.print(w2); 
-    
+    myFile.print(w1);  
+        
     myFile.print("\n");
     
-    myFile.print((h2+h)/2);
-    myFile.print("; ");
-    myFile.print((t2+t)/2);
-    myFile.print("\n");
-       
- 
     myFile.close(); // close the file:
 
     delay(3000);
